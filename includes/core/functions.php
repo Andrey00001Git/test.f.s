@@ -72,6 +72,7 @@ function phone_formatting($phone) {
 }
 
 function paginator($total, $offset, $q, $path, &$out) {
+
     if ($total > $q) {
         $m = 0;
         // digital links
@@ -81,14 +82,14 @@ function paginator($total, $offset, $q, $path, &$out) {
         if ($min < 0) $min = 0;
         else {
             if ($min >= 1) {
-                $out .= '<a href="/'.$path.'offset=0">1</a>';
+                $out .= '<a href="/'.$path.'?offset=0">1</a>';
                 if ($min != 1) $out .= '&nbsp;&nbsp;...&nbsp;&nbsp;';
             }
         }
         for ($i = $min; $i < $k; $i++) {
             $m = $i*$q + $q;
             if ($m > $total) $m = $total;
-            $out .= '<a href="/'.$path.'offset='.($i*$q).'">'.$m/$q.'</a>';
+            $out .= '<a href="/'.$path.'?offset='.($i*$q).'">'.$m/$q.'</a>';
         }
         // # of current page
         $out .= '<a href="#" class="active">'.(($m/$q)+1).'</a>';
@@ -98,11 +99,12 @@ function paginator($total, $offset, $q, $path, &$out) {
         for ($i = $k + 1; $i < $min; $i++) {
             $m = $i * $q + $q;
             if ($m > $total) $m = $total;
-            $out .= '<a href="/'.$path.'offset='.($i*$q).'">'.ceil($m/$q).'</a>';
+            $out .= '<a href="/'.$path.'?offset='.($i*$q).'">'.ceil($m/$q).'</a>';
         }
         if ($min * $q < $total) {
             if ($min * $q < $total-$q) $out .= '&nbsp;&nbsp;...&nbsp;&nbsp;';
-            $out .= '<a href="/'.$path.'offset='.(($total-1)-($total-1)%$q).'">'.ceil($total/$q).'</a>';
+            $out .= '<a href="/'.$path.'?offset='.(($total-1)-($total-1)%$q).'">'.ceil($total/$q).'</a>';
         }
+
     }
 }

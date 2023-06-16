@@ -29,6 +29,7 @@ class HTML {
     }
 
     public static function fetch($file, $display = false) {
+
         $path = self::get_path($file);
         if ($display) {
             if (self::is_compiled($file, $path) || self::compile($file, $path)) require($path);

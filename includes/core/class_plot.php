@@ -68,6 +68,7 @@ class Plot {
         if ($search) $url .= '?search='.$search.'&';
         paginator($count, $offset, $limit, $url, $paginator);
         // output
+
         return ['items' => $items, 'paginator' => $paginator];
     }
 
