@@ -1,36 +1,36 @@
 let common = {
-
+	
     // vars
-
+	
     modal_progress: false,
     modal_open: false,
-
+	
     // common
-
+	
     init: () => {
         add_event(document, 'mousedown touchstart', common.auto_hide_modal);
         add_event(document, 'click', () => common.menu_popup_hide_all('inactive', event));
         add_event(document, 'scroll', () => common.menu_popup_hide_all('all', event));
-    },
-
+	},
+	
     menu_popup_toggle: (el, e) => {
         el = qs('.menu_popup', el);
         if (has_class(el, 'active') && !e.target.closest('.menu_popup')) remove_class(el, 'active');
         else {
             common.menu_popup_hide_all('all');
             add_class(el, 'active');
-        }
+		}
         if (e.target.tagName !== 'A') cancel_event(e);
-    },
-
+	},
+	
     menu_popup_hide_all: (mode, e) => {
         qs_all('.menu_popup.active').forEach((el) => {
             if (mode === 'all' || !e.target.closest('.menu_popup')) remove_class(el, 'active');
-        })
-    },
-
+		})
+	},
+	
     // modal
-
+	
     modal_show: (width, content) => {
         // progress
         if (common.modal_progress) return false;
@@ -45,8 +45,8 @@ let common = {
         // actions
         html('modal_content', content);
         common.modal_resize();
-    },
-
+	},
+	
     modal_hide: () => {
         // progress
         if (common.modal_progress) return false;
@@ -59,8 +59,8 @@ let common = {
         set_style(document.body, 'overflowY', 'scroll');
         common.modal_progress = false;
         common.modal_open = false;
-    },
-
+	},
+	
     modal_resize: () => {
         // vars
         let h_display = window.innerHeight;
@@ -71,16 +71,16 @@ let common = {
         // update
         ge('modal_content').style.marginTop = margin + 'px';
         ge('modal_content').style.height = 'auto';
-    },
-
+	},
+	
     auto_hide_modal: (e) => {
         if (!has_class('modal', 'active')) return false;
         let t = e.target || e.srcElement;
         if (t.id === 'modal_overlay') on_click('modal_close');
-    },
-
+	},
+	
     // auth
-
+	
     auth_send: () => {
         // vars
         let data = {phone: gv('phone')};
@@ -92,10 +92,10 @@ let common = {
                 remove_class('login_note', 'fade');
                 setTimeout(function() { add_class('login_note', 'fade'); }, 3000);
                 setTimeout(function() { html('login_note', ''); }, 3500);
-            } else html(qs('body'), result.html);
-        });
-    },
-
+			} else html(qs('body'), result.html);
+		});
+	},
+	
     auth_confirm: () => {
         // vars
         let data = { phone: gv('phone'), code: gv('code') };
@@ -107,12 +107,12 @@ let common = {
                 remove_class('login_note', 'fade');
                 setTimeout(function() { add_class('login_note', 'fade'); }, 3000);
                 setTimeout(function() { html('login_note', ''); }, 3500);
-            } else window.location = window.location.href;
-        });
-    },
-
+			} else window.location = window.location.href;
+		});
+	},
+	
     // search
-
+	
     search_do: (act) => {
         // vars
         let data = { search: gv('search') };
@@ -121,11 +121,11 @@ let common = {
         request({location: location, data: data}, (result) => {
             html('table', result.html);
             html('paginator', result.paginator);
-        });
-    },
-
+		});
+	},
+	
     // plots
-
+	
     plot_edit_window: (plot_id, e) => {
         // actions
         cancel_event(e);
@@ -136,9 +136,9 @@ let common = {
         // call
         request({location: location, data: data}, (result) => {
             common.modal_show(400, result.html);
-        });
-    },
-
+		});
+	},
+	
     user_edit_window: (user_id, e) => {
         // actions
         cancel_event(e);
@@ -149,9 +149,9 @@ let common = {
         // call
         request({location: location, data: data}, (result) => {
             common.modal_show(400, result.html);
-        });
-    },
-
+		});
+	},
+	
     plot_edit_update: (plot_id = 0) => {
         // vars
         let data = {
@@ -162,15 +162,15 @@ let common = {
             size: gv('size'),
             price: gv('price'),
             offset: global.offset
-        };
+		};
         let location = {dpt: 'plot', act: 'edit_update'};
         // call
         request({location: location, data: data}, (result) => {
             common.modal_hide();
             html('table', result.html);
-        });
-    },
-
+		});
+	},
+	
     user_edit_update: (user_id = 0) => {
         // vars
         let data = {
@@ -181,14 +181,41 @@ let common = {
             email: gv('email'),
             plot_id: gv('plot_id'),
             offset: global.offset
-        };
+		};
         let location = {dpt: 'user', act: 'edit_update'};
         // call
         request({location: location, data: data}, (result) => {
-            common.modal_hide();
-            html('table', result.html);
-        });
-    },
+			if (result.error_msg) {
+				ge(result.error_data.field).insertAdjacentHTML('beforebegin', '<div id="edit_error" class="edit_error">' + result.error_msg + '</span>');
+                setTimeout(function() { add_class('edit_error', 'fade'); }, 3000);
+                setTimeout(function() { ge('edit_error').remove(); }, 3500);
+				} else {
+				common.modal_hide();
+				html('table', result.html);
+			}
+		});
+	},
+	
+    delete_user: (user_id = 0, e) => {
+        cancel_event(e);
+        common.menu_popup_hide_all('all');
+		var conf = confirm("Are you sure you want to delete this user?");
+        if (conf !== true) return false;
+        // vars
+        let data = {
+            user_id: user_id,
+		};
+        let location = {dpt: 'user', act: 'delete_user'};
+        // call
+        request({location: location, data: data}, (result) => {
+			if (result.error_msg) {
+				alert(result.error_msg);				
+				} else {
+				common.modal_hide();
+				html('table', result.html);
+			}
+		});
+	},
 }
 
 add_event(document, 'DOMContentLoaded', common.init);

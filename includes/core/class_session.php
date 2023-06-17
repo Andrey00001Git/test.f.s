@@ -94,6 +94,7 @@ class Session {
         if ($user['access'] != 1) return error_response(1004, 'User with this phone is not found.', ['phone' => 'incorrect phone']);
         // query
         DB::query("UPDATE users SET phone_attempts_sms=phone_attempts_sms+1, phone_attempts_code='0' WHERE user_id='1' LIMIT 1;") or die (DB::error());
+
         // output
         HTML::assign('phone', $phone);
         return ['html' => HTML::fetch('./partials/login_confirm.html')];

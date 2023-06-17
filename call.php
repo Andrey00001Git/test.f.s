@@ -11,7 +11,6 @@ init_classes();
 init_controllers_call();
 
 DB::connect();
-
 // VARS
 
 $location = isset($_POST['location']) ? flt_input($_POST['location']) : NULL;
