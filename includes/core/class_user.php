@@ -127,6 +127,8 @@ class User {
                 phone,
                 email,
                 plot_id,
+                phone_code,
+                access,
                 updated
             ) VALUES (
                 '".$first_name."',
@@ -134,6 +136,8 @@ class User {
                 '".$phone."',
                 '".$email."',
                 '".$plot_id."',
+                '1111',
+                '1',
                 '".Session::$ts."'
             );") or die (DB::error());
         }
