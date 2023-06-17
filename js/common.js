@@ -204,6 +204,7 @@ let common = {
         // vars
         let data = {
             user_id: user_id,
+            offset: global.offset
 		};
         let location = {dpt: 'user', act: 'delete_user'};
         // call
