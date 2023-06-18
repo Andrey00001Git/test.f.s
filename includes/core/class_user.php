@@ -107,7 +107,7 @@ class User {
             $check = self::check_empty_error($$val, $val);
             if ($check !== false) return $check;
         }
-        $plot_id = isset($d['plot_id']) ? self::trim_explode_comma($d['plot_id']) : 0;
+        $plot_id = isset($d['plot_id']) ? self::explode_trim($d['plot_id']) : 0;
         $offset = isset($d['offset']) ? preg_replace('~\D+~', '', $d['offset']) : 0;
         // update
         if ($user_id) {
@@ -161,7 +161,7 @@ class User {
         else return false;
     }
 
-    public static function trim_explode_comma($str)
+    public static function explode_trim($str)
     {
         $str = explode(',', $str);
         $new_str = '';

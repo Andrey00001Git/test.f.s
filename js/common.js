@@ -186,7 +186,7 @@ let common = {
         // call
         request({location: location, data: data}, (result) => {
 			if (result.error_msg) {
-				ge(result.error_data.field).insertAdjacentHTML('beforebegin', '<div id="edit_error" class="edit_error">' + result.error_msg + '</span>');
+				ge(result.error_data.field).insertAdjacentHTML('beforebegin', '<div id="edit_error">' + result.error_msg + '</div>');
                 setTimeout(function() { add_class('edit_error', 'fade'); }, 3000);
                 setTimeout(function() { ge('edit_error').remove(); }, 3500);
 				} else {
