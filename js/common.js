@@ -212,8 +212,7 @@ let common = {
     delete_user: (user_id = 0, e) => {
         cancel_event(e);
         common.menu_popup_hide_all('all');
-        var conf = confirm("Are you sure you want to delete this user?");
-        if (conf !== true) return false;
+        if (!confirm("Are you sure you want to delete this user?")) return false;
         // vars
         let data = {
             user_id: user_id,
