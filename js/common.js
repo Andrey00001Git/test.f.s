@@ -212,23 +212,27 @@ let common = {
     delete_user: (user_id = 0, e) => {
         cancel_event(e);
         common.menu_popup_hide_all('all');
-        if (!confirm("Are you sure you want to delete this user?")) return false;
-        // vars
-        let data = {
-            user_id: user_id,
-            offset: global.offset
-        };
-        let location = {dpt: 'user', act: 'delete_user'};
-        // call
-        request({location: location, data: data}, (result) => {
-            if (result.error_msg) {
-                alert(result.error_msg);
-            } else {
-                common.modal_hide();
-                html('table', result.html);
-            }
+        // let the popup menu close before confirmation
+        setTimeout(() => {
+            if (!confirm("Are you sure you want to delete this user?")) return false;
+            // vars
+            let data = {
+                user_id: user_id,
+                offset: global.offset
+            };
+            let location = {dpt: 'user', act: 'delete_user'};
+            // call
+            request({location: location, data: data}, (result) => {
+                if (result.error_msg) {
+                    alert(result.error_msg);
+                } else {
+                    common.modal_hide();
+                    html('table', result.html);
+                }
+            });
         });
     },
 }
 
 add_event(document, 'DOMContentLoaded', common.init);
+
