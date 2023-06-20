@@ -10,7 +10,7 @@
     </tr>
     {section name=i loop=$users}
     <tr>
-        <td>{$users[i].plot_id}</td>
+        <td>{section name=j loop=$users[i].plot_id}{$users[i].plot_id[j]}{/section}</td>
         <td>{$users[i].first_name}</td>
         <td>{$users[i].last_name}</td>
         <td>{$users[i].phone}</td>
